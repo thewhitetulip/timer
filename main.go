@@ -16,11 +16,12 @@ func main() {
 		numberOfHours += 1
 		currentTime = time.Now()
 		today := currentTime.Weekday()
+		log.Print(today==1)
 		hour := currentTime.Hour()
-		if today == 0 || today == 5 || today == 6 {
+		if today ==0 || today==5 || today==6 {
 			isWeekend = true
 		}
-		if (hour >= 22 || hour <= 3) && (isWeekend == false) {
+		if (hour >= 22 || hour <= 3 ) && (isWeekend==false){
 			message = "Late night on a weekday. Sleep!."
 		} else {
 			if numberOfHours == 1 {
