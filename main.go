@@ -7,13 +7,22 @@ import (
 )
 
 func main() {
+	log.Print("Started running timer")
 	var numberOfHours int
 	var message string
+	isWeekend := false
+	var currentTime time.Time
 	for {
 		numberOfHours += 1
-		hour := time.Now().Hour()
-		if hour >= 22 || hour <= 3 {
-			message = "You should seriously sleep now."
+		currentTime = time.Now()
+		today := currentTime.Weekday()
+		log.Print(today==1)
+		hour := currentTime.Hour()
+		if today ==0 || today==5 || today==6 {
+			isWeekend = true
+		}
+		if (hour >= 22 || hour <= 3 ) && (isWeekend==false){
+			message = "Late night on a weekday. Sleep!."
 		} else {
 			if numberOfHours == 1 {
 				message = "One hour! Take a break"
@@ -23,7 +32,8 @@ func main() {
 				message = "Take a break now. Seriously."
 			}
 		}
-		time.Sleep(2 * time.Hour)
+		log.Print("Sleeping program for one hour")
+		time.Sleep(1 * time.Hour)
 
 		cmd := exec.Command("notify-send", message)
 		err := cmd.Run()
