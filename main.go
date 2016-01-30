@@ -1,8 +1,8 @@
 package main
 
 import (
+	"github.com/0xAX/notificator"
 	"log"
-	"os/exec"
 	"time"
 )
 
@@ -16,12 +16,10 @@ func main() {
 		numberOfHours += 1
 		currentTime = time.Now()
 		today := currentTime.Weekday()
-		log.Print(today==1)
 		hour := currentTime.Hour()
-		if today ==0 || today==5 || today==6 {
-			isWeekend = true
-		}
-		if (hour >= 22 || hour <= 3 ) && (isWeekend==false){
+		isWeekend = today == time.Sunday || today == time.Friday || today == time.Saturday
+
+		if (hour >= 22 || hour <= 6) && (isWeekend == false) {
 			message = "Late night on a weekday. Sleep!."
 		} else {
 			if numberOfHours == 1 {
@@ -32,15 +30,28 @@ func main() {
 				message = "Take a break now. Seriously."
 			}
 		}
+
 		log.Print("Sleeping program for one hour")
-		time.Sleep(1 * time.Hour)
+		time.Sleep(1 * time.Second)
 
-		cmd := exec.Command("notify-send", message)
-		err := cmd.Run()
-		if err != nil {
-			log.Fatal(err)
-		}
-
+		showNotification(message)
 	}
+
+}
+
+func showNotification(message string) {
+	notify := notificator.New(notificator.Options{
+		DefaultIcon: "icon/default.png",
+		AppName:     "Timer",
+	})
+
+	notify.Push("Take a Break", message, "", notificator.UR_CRITICAL)
+
+	// Check errors
+	//	err := notify.Push("error", "ops =(", "", notificator.UR_CRITICAL)
+
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
 
 }
