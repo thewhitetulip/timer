@@ -18,21 +18,19 @@ func main() {
 		today := currentTime.Weekday()
 		hour := currentTime.Hour()
 		isWeekend = today == time.Sunday || today == time.Friday || today == time.Saturday
-
-		if (hour >= 22 || hour <= 6) && (isWeekend == false) {
+		switch {
+		case (hour >= 22 || hour <= 3) && !isWeekend:
 			message = "Late night on a weekday. Sleep!."
-		} else {
-			if numberOfHours == 1 {
-				message = "One hour! Take a break"
-			} else if numberOfHours == 2 {
-				message = "Two hours! Take a break now."
-			} else {
-				message = "Take a break now. Seriously."
-			}
+		case numberOfHours == 1:
+			message = "One hour! Take a break"
+		case numberOfHours == 2:
+			message = "Two hours! Take a break now."
+		case numberOfHours > 2: // or default:
+			message = "Take a break now. Seriously."
 		}
 
 		log.Print("Sleeping program for one hour")
-		time.Sleep(1 * time.Second)
+		time.Sleep(1 * time.Hour)
 
 		showNotification(message)
 	}
